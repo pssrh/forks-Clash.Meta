@@ -54,6 +54,7 @@ var Path = func() *path {
 type path struct {
 	homeDir         string
 	configFile      string
+	cacheFile       string
 	allowUnsafePath bool
 	safePaths       []string
 }
@@ -66,6 +67,11 @@ func SetHomeDir(root string) {
 // SetConfig is used to set the configuration file
 func SetConfig(file string) {
 	Path.configFile = file
+}
+
+// SetCacheFile is used by FlClash to place cache.db under App Group / sandbox paths.
+func SetCacheFile(file string) {
+	Path.cacheFile = file
 }
 
 func (p *path) HomeDir() string {
@@ -188,6 +194,9 @@ func (p *path) OldCache() string {
 }
 
 func (p *path) Cache() string {
+	if p.cacheFile != "" {
+		return p.cacheFile
+	}
 	return P.Join(p.homeDir, "cache.db")
 }
 
